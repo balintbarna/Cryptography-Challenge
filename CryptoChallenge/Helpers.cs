@@ -7,12 +7,13 @@ namespace CryptoChallenge
 {
     class Helpers
     {
-        public static string capitalLetters = GetCharacterRange('A','Z');
-        public static string smallLetters = GetCharacterRange('a', 'z');
-        public static string numbers = GetCharacterRange('0', '9');
-        public static string basicCharacters = " '.?!:,;-\n\r\t";
-        public static string allChars = capitalLetters + smallLetters + numbers + basicCharacters;
-        //public static string allChars = GetCharacterRange(' ', '~') + "\n\r\t";
+        public static readonly string capitalLetters = GetCharacterRange('A','Z');
+        public static readonly string smallLetters = GetCharacterRange('a', 'z');
+        public static readonly string numbers = GetCharacterRange('0', '9');
+        public static readonly string punctuation = GetCharacterRange('0', '9');
+        public static readonly string basicCharacters = " '.?!:,;-\n\r\t";
+        public static readonly string legitChars = capitalLetters + smallLetters + numbers + basicCharacters;
+        public static readonly string allChars = GetCharacterRange(' ', '~') + "\n\r\t";
         public static string HexToBase64(string hex)
         {
             return Convert.ToBase64String(HexToBytes(hex));
@@ -70,12 +71,12 @@ namespace CryptoChallenge
 
         public static bool IsRealText(string text)
         {
-            return !text.Any(c => !allChars.Contains(c));
+            return text.All(c => legitChars.Contains(c));
         }
 
         public static string GetCharacterRange(char from, char to)
         {
-            return new String(Enumerable.Range(from, to - from + 1).Select(i => (Char)i).ToArray());
+            return new String(U.through(from, to).Select(i => (Char)i).ToArray());
         }
 
         public static int HighBitCount(byte n)
